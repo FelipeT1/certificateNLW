@@ -1,6 +1,7 @@
 package br.com.felipeteixeira.certificationNLW;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +21,14 @@ public class FirstController {
         var usuario = new Usuario("Felipe", 24);
         return usuario;
     }
-    
+    // Se acessado pelo browser dará erro
+    // Já que o browser não suporta o Post através de um GET
+    // Por isso precisamos de uma API, como Httpie
+    @PostMapping("/firstPost")
+    public String returnFirstPost(){
+        return "Meu primeiro POST";
+    }
+
     // Define uma classe com métodos pré-definidos
     record Usuario (String nome, int idade) {}
 
