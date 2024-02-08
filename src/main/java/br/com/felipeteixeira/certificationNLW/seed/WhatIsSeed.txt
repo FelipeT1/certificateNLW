@@ -1,0 +1,1 @@
+Seed é executar um código antes da aplicação inicializar
