@@ -9,6 +9,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+
+// Isolado do springboot, já que não possui a annotation @SpringBoot....
 public class CreateSeed {
     private final JdbcTemplate jdbcTemplate;
 
