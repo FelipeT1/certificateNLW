@@ -10,5 +10,7 @@ import br.com.felipeteixeira.certificationNLW.modules.questions.entities.Questio
 public interface QuestionRepository extends JpaRepository<QuestionsEntity, UUID> {
     
     // findByNome é algo do spring boot, procurará essa coluna em question entity
+    // Como QuestionEntity já possui o atributo technology
+    // O @Query não é necessário
     List<QuestionsEntity> findByTechnology(String technology);
 }
