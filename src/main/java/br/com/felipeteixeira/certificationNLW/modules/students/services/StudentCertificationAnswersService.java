@@ -14,6 +14,7 @@ import br.com.felipeteixeira.certificationNLW.modules.students.dto.StudentCertif
 import br.com.felipeteixeira.certificationNLW.modules.students.entities.AnswersCertificationEntity;
 import br.com.felipeteixeira.certificationNLW.modules.students.entities.CertificationStudentEntity;
 import br.com.felipeteixeira.certificationNLW.modules.students.entities.StudentEntity;
+import br.com.felipeteixeira.certificationNLW.modules.students.repositories.CertificationStudentRepository;
 import br.com.felipeteixeira.certificationNLW.modules.students.repositories.StudentRepository;
 
 
@@ -24,11 +25,14 @@ public class StudentCertificationAnswersService {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private CertificationStudentRepository certificationRepository;
     
 
 
 
-    public StudentCertificationAnswersDTO execute(StudentCertificationAnswersDTO dto){
+    public CertificationStudentEntity execute(StudentCertificationAnswersDTO dto){
 
         // Busca a questão e suas alternativas para saber qual é a correta
         var questions = questionRepository.findByTechnology(dto.getTechnology());
@@ -73,6 +77,17 @@ public class StudentCertificationAnswersService {
             studentID = student.get().getId();
         }
 
-        return dto;
+        List<AnswersCertificationEntity> answersCertifications = new ArrayList<>();
+
+        var certificationStudentEntity = CertificationStudentEntity
+        .builder()
+        .studentID(studentID)
+        .technology(dto.getTechnology())
+        .answersCertificationEntity(answersCertifications)
+        .build();
+
+        var certificationStudentCreated = certificationRepository.save(certificationStudentEntity);
+
+        return certificationStudentCreated;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.felipeteixeira.certificationNLW.modules.students.dto.StudentCertificationAnswersDTO;
 import br.com.felipeteixeira.certificationNLW.modules.students.dto.VerifyHasCertificationDTO;
+import br.com.felipeteixeira.certificationNLW.modules.students.entities.CertificationStudentEntity;
 import br.com.felipeteixeira.certificationNLW.modules.students.services.StudentCertificationAnswersService;
 import br.com.felipeteixeira.certificationNLW.modules.students.services.VerifyIfHasCertificationService;
 
@@ -35,7 +36,7 @@ public class StudentController {
     }
 
     @PostMapping("/certification/answer")
-    public StudentCertificationAnswersDTO certificationAsnwer(@RequestBody StudentCertificationAnswersDTO dto) {
+    public CertificationStudentEntity certificationAsnwer(@RequestBody StudentCertificationAnswersDTO dto) {
         return service.execute(dto);
     }
 }
