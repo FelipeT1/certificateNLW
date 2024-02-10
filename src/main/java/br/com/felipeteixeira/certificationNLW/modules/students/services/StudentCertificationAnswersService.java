@@ -1,11 +1,19 @@
 package br.com.felipeteixeira.certificationNLW.modules.students.services;
 
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.felipeteixeira.certificationNLW.modules.questions.repositories.QuestionRepository;
 import br.com.felipeteixeira.certificationNLW.modules.students.dto.StudentCertificationAnswersDTO;
+import br.com.felipeteixeira.certificationNLW.modules.students.entities.AnswersCertificationEntity;
 import br.com.felipeteixeira.certificationNLW.modules.students.entities.CertificationStudentEntity;
+import br.com.felipeteixeira.certificationNLW.modules.students.entities.StudentEntity;
 import br.com.felipeteixeira.certificationNLW.modules.students.repositories.StudentRepository;
 
 
@@ -16,6 +24,8 @@ public class StudentCertificationAnswersService {
 
     @Autowired
     private QuestionRepository questionRepository;
+    
+
 
 
     public StudentCertificationAnswersDTO execute(StudentCertificationAnswersDTO dto){
@@ -43,7 +53,25 @@ public class StudentCertificationAnswersService {
 
             }
         });
-        
+
+        // verifica se o estudante existe pelo email
+        // se não achar no banco de dados, o aluno será cadastrado
+
+        var student = studentRepository.findByEmail(dto.getEmail());
+        UUID studentID;
+        if(student.isEmpty()){
+            var studentCreated = StudentEntity
+            .builder()
+            .email(dto.getEmail())
+            .build();
+
+            studentCreated = studentRepository.save(studentCreated);
+            studentID = studentCreated.getId();
+            
+        }
+        else{
+            studentID = student.get().getId();
+        }
 
         return dto;
     }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.felipeteixeira.certificationNLW.modules.students.dto.StudentCertificationAnswersDTO;
 import br.com.felipeteixeira.certificationNLW.modules.students.dto.VerifyHasCertificationDTO;
 import br.com.felipeteixeira.certificationNLW.modules.students.services.StudentCertificationAnswersService;
-import br.com.felipeteixeira.certificationNLW.modules.students.useCases.VerifyIfHasCertificationUseCase;
+import br.com.felipeteixeira.certificationNLW.modules.students.services.VerifyIfHasCertificationService;
 
 
 
@@ -18,7 +18,7 @@ import br.com.felipeteixeira.certificationNLW.modules.students.useCases.VerifyIf
 @RequestMapping("/students")
 public class StudentController {
     @Autowired
-    private VerifyIfHasCertificationUseCase useCase;
+    private VerifyIfHasCertificationService useCase;
 
     @Autowired
     private StudentCertificationAnswersService service;
