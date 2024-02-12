@@ -4,8 +4,9 @@ package br.com.felipeteixeira.certificationNLW.modules.students.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
-
+import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,9 @@ public class StudentCertificationAnswersService {
 
         // Busca a questão e suas alternativas para saber qual é a correta
         var questions = questionRepository.findByTechnology(dto.getTechnology());
+        List<AnswersCertificationEntity> answersCertifications = new ArrayList<>();
+
+        AtomicInteger correctAnswersCounter = new AtomicInteger(0);
 
         dto.getQuestionAnswers()
         .stream()
@@ -51,11 +55,22 @@ public class StudentCertificationAnswersService {
             // If correct answer id is equal to chosen alternative
             if(correct.getId().equals(questionAnswer.getAlternativeID())){
                 questionAnswer.setCorrect(true);
+                correctAnswersCounter.incrementAndGet();
             }
             else{
                 questionAnswer.setCorrect(false);
 
             }
+
+            var answersCertificationEntity = AnswersCertificationEntity
+            .builder()
+            .answerID(questionAnswer.getAlternativeID())
+            .questionID(questionAnswer.getQuestionID())
+            .isCorrect(questionAnswer.isCorrect())
+            .build();
+
+            answersCertifications.add(answersCertificationEntity);
+
         });
 
         // verifica se o estudante existe pelo email
@@ -77,16 +92,23 @@ public class StudentCertificationAnswersService {
             studentID = student.get().getId();
         }
 
-        List<AnswersCertificationEntity> answersCertifications = new ArrayList<>();
 
         var certificationStudentEntity = CertificationStudentEntity
         .builder()
         .studentID(studentID)
         .technology(dto.getTechnology())
-        .answersCertificationEntity(answersCertifications)
+        .grate(correctAnswersCounter.get())
         .build();
-
         var certificationStudentCreated = certificationRepository.save(certificationStudentEntity);
+
+        answersCertifications.stream().forEach(answerCertifications -> {
+            answerCertifications.setAnswerID(certificationStudentEntity.getId());
+            answerCertifications.setCertificationStudentEntity(certificationStudentEntity);
+        });
+
+        certificationStudentEntity.setAnswersCertificationEntity(answersCertifications);
+
+        certificationRepository.save(certificationStudentEntity);
 
         return certificationStudentCreated;
     }
