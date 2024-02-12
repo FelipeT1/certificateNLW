@@ -37,7 +37,7 @@ public class StudentController {
     }
 
     @PostMapping("/certification/answer")
-    public ResponseEntity<Object> certificationAsnwer(@RequestBody StudentCertificationAnswersDTO dto) throws Exception {
+    public ResponseEntity<Object> certificationAsnwer(@RequestBody StudentCertificationAnswersDTO dto) {
         try{
             var result = service.execute(dto);
             return ResponseEntity.ok().body(result);
