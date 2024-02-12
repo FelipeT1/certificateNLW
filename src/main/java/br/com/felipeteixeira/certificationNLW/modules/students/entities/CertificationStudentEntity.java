@@ -41,7 +41,7 @@ public class CertificationStudentEntity {
 
     // Esse studentID está relacionado com a classe studentEntity,
     // então é uma "chave estrangeuira" = FK (Forengein key), precisamos relacionar esse atributo com a classe
-    @JoinColumn(name = "student_id")
+    @Column(name = "student_id")
     private UUID studentID;
 
 

@@ -1,6 +1,7 @@
 package br.com.felipeteixeira.certificationNLW.modules.students.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ public class StudentController {
     public String verifyHasCertification(@RequestBody VerifyHasCertificationDTO verifyHasCertificationDTO){
         System.out.println(verifyHasCertificationDTO);
 
-        if(!useCase.execute(verifyHasCertificationDTO)){
+        if(useCase.execute(verifyHasCertificationDTO)){
             return "NÃO PODE FAZER A PROVA!";
         }
 
@@ -36,7 +37,13 @@ public class StudentController {
     }
 
     @PostMapping("/certification/answer")
-    public CertificationStudentEntity certificationAsnwer(@RequestBody StudentCertificationAnswersDTO dto) {
-        return service.execute(dto);
+    public ResponseEntity<Object> certificationAsnwer(@RequestBody StudentCertificationAnswersDTO dto) throws Exception {
+        try{
+            var result = service.execute(dto);
+            return ResponseEntity.ok().body(result);
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

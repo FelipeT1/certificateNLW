@@ -15,6 +15,6 @@ public class VerifyIfHasCertificationService {
         var result = this.certificationStudentRepository
         .findByStudentEmailAndTechnology(dto.getEmail(), dto.getTechnology());
         
-        return result.isEmpty();
+        return !result.isEmpty();
     }
 }

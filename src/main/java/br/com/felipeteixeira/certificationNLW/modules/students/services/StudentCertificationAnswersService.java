@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.felipeteixeira.certificationNLW.modules.questions.repositories.QuestionRepository;
 import br.com.felipeteixeira.certificationNLW.modules.students.dto.StudentCertificationAnswersDTO;
+import br.com.felipeteixeira.certificationNLW.modules.students.dto.VerifyHasCertificationDTO;
 import br.com.felipeteixeira.certificationNLW.modules.students.entities.AnswersCertificationEntity;
 import br.com.felipeteixeira.certificationNLW.modules.students.entities.CertificationStudentEntity;
 import br.com.felipeteixeira.certificationNLW.modules.students.entities.StudentEntity;
@@ -30,11 +31,18 @@ public class StudentCertificationAnswersService {
     @Autowired
     private CertificationStudentRepository certificationRepository;
     
+    @Autowired
+    private VerifyIfHasCertificationService verifyIfHasCertificationService;
 
 
+    public CertificationStudentEntity execute(StudentCertificationAnswersDTO dto) throws Exception{
 
-    public CertificationStudentEntity execute(StudentCertificationAnswersDTO dto){
+        var studentAlreadyHasCertification = this.verifyIfHasCertificationService
+        .execute(new VerifyHasCertificationDTO(dto.getEmail(), dto.getTechnology()));
 
+        if(studentAlreadyHasCertification){
+            throw new Exception("You already have a certification");
+        }
         // Busca a questão e suas alternativas para saber qual é a correta
         var questions = questionRepository.findByTechnology(dto.getTechnology());
         List<AnswersCertificationEntity> answersCertifications = new ArrayList<>();
